@@ -187,20 +187,6 @@ This program is available under Apache License Version 2.0, available at https:/
         pointer-events: none;
       }
 
-      [scrolling][safari] #outerscroller,
-      [scrolling][firefox] #outerscroller {
-        pointer-events: auto;
-      }
-
-      [ios] #outerscroller {
-        pointer-events: auto;
-        z-index: -3;
-      }
-
-      [ios][scrolling] #outerscroller {
-        z-index: 0;
-      }
-
       /* Reordering styles */
       :host([reordering]) [part~="cell"] ::slotted(vaadin-grid-cell-content),
       :host([reordering]) [part~="resize-handle"],
@@ -328,5 +314,28 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
   `);
 
+  const safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  const firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+
+  if (safari || firefox) {
+    VaadinGridStyles.appendChild(
+      Polymer.html`
+      <style>
+        [scrolling][safari] #outerscroller,
+        [scrolling][firefox] #outerscroller {
+          pointer-events: auto;
+        }
+
+        [ios] #outerscroller {
+          pointer-events: auto;
+          z-index: -3;
+        }
+
+        [ios][scrolling] #outerscroller {
+          z-index: 0;
+        }
+      </style>
+    `);
+  }
   VaadinGridStyles.register('vaadin-grid-styles');
 </script>
